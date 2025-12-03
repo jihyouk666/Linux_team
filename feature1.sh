@@ -1,31 +1,26 @@
 #!/bin/bash
 
-# 1. 사용자로부터 확장자 입력받기 (점(.) 없이 입력)
 echo "정리할 파일의 확장자를 입력하세요 (예: txt, jpg):"
-read TARGET_EXT
+read TARGET_EXT #사용자 입력
 
-# 확장자 입력 검사
-if [ -z "$TARGET_EXT" ]; then
+if [ -z "$TARGET_EXT" ]; then #문자열의 길이가 0이면 참
     echo "오류: 확장자를 입력해야 합니다."
     exit 1
 fi
 
-# 2. 정리 폴더 설정 및 생성
 DEST_DIR="${TARGET_EXT}_FILES_MOVED"
 
-if [ ! -d "$DEST_DIR" ]; then
-    mkdir "$DEST_DIR"
+if [ ! -d "$DEST_DIR" ]; then #특정 디렉토리가 존재하지 않을 때
+    mkdir "$DEST_DIR" #디렉토리 생성
     echo "--> 정리 폴더 '$DEST_DIR' 생성 완료."
 fi
 
-# 3. 반복문과 조건문을 사용하여 파일 정리
 COUNT=0
-# 현재 폴더의 모든 항목을 순회 (공백 포함 파일명 처리를 위해 IFS 설정)
-IFS=$'\n'
+# 기본값은 공백, 탭, 줄바꿈->줄바꿈만 설정
+IFS=$'\n' # (공백 포함 파일명 가능)
 for ITEM in *; do
-    
-    # 3-1. 조건문 1: 현재 항목이 '파일'인지 확인 (폴더는 건너뛰기)
-    if [ -f "$ITEM" ]; then
+
+    if [ -f "$ITEM" ]; then # 일반 파일인지 확인
         
         # 3-2. 조건문 2: 파일 이름에 ".확장자" 문자열이 포함되어 있는지 grep으로 확인
         # grep -q: 결과를 출력하지 않고 (q: quiet), 매칭되면 성공(exit 0), 아니면 실패(exit 1)를 반환
